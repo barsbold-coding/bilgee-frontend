@@ -3,9 +3,8 @@
 import { useState, useEffect } from 'react';
 import { internshipsAPI, favoritesAPI } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
-import Link from 'next/link';
 import { InternshipType } from '@/types/api.types';
-import { Button } from '@/components/ui/button';
+import { InternshipCard } from '@/components/internship-card';
 
 export default function InternshipsPage() {
   const [internships, setInternships] = useState<InternshipType[]>([]);
@@ -75,31 +74,15 @@ export default function InternshipsPage() {
         ) : (
           <div className="grid grid-cols-1 gap-6">
             {internships.map((internship) => (
-              <div key={internship.id} className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h2 className="text-xl font-semibold mb-2">{internship.title}</h2>
-                    <p className="text-gray-600 mb-1">{internship.employer.name}</p>
-                  </div>
-                  
-                  {isAuthenticated && isStudent && (
-                    <button
-                      onClick={() => toggleFavorite(internship.id)}
-                      className="text-2xl focus:outline-none"
-                      aria-label={favorites.has(internship.id) ? "Remove from favorites" : "Add to favorites"}
-                    >
-                      {favorites.has(internship.id) ? "❤️" : "🤍"}
-                    </button>
-                  )}
-                </div>
-                
-                <p className="text-gray-700 mb-4 line-clamp-3">{internship.description}</p>
-                <Button variant="outline">
-                  <Link href={`/internships/${internship.id}`}>
-                    Дэлгэрэнгүй
-                  </Link>
-                </Button>
-              </div>
+              <InternshipCard
+                key={internship.id}
+                id={internship.id}
+                title={internship.title}
+                employer={internship.employer}
+                description={internship.description}
+                isFavourite={favorites.has(internship.id)}
+                toggleFavorite={toggleFavorite}
+              />
             ))}
             
             {internships.length === 0 && (

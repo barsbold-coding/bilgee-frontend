@@ -42,9 +42,7 @@ export type InternshipType = {
   salaryRange?: string;
   startDate: Date;
   endDate: Date;
-  employer: {
-    name: string;
-  };
+  employer: User;
 }
 export type CreateInternshipType = {
   title: string;
