@@ -19,7 +19,7 @@ export function Navbar() {
           <DropdownMenuContent>
             <DropdownMenuItem>
               <Button className="w-full" variant="ghost">
-                <Link href="/">Миний CV</Link>
+                <Link href="/resume">Миний CV</Link>
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem>
