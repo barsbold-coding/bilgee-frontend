@@ -80,7 +80,7 @@ export default function InternshipsPage() {
                 title={internship.title}
                 employer={internship.employer}
                 description={internship.description}
-                isFavourite={favorites.has(internship.id)}
+                isFavorite={favorites.has(internship.id)}
                 toggleFavorite={toggleFavorite}
               />
             ))}

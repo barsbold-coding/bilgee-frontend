@@ -3,30 +3,43 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Space } from "./space";
+import { HeartIcon } from "lucide-react";
 
 type InternshipCardProps = {
   id: number;
   title: string;
   employer: User;
   description: string;
-  isFavourite: boolean;
+  isFavorite: boolean;
   toggleFavorite: (internshipId: number) => Promise<void>
 }
 
-export function InternshipCard({ id, title, employer, description, toggleFavorite }: InternshipCardProps) {
+export function InternshipCard({ id, title, employer, description, isFavorite, toggleFavorite }: InternshipCardProps) {
   return (
     <Card>
       <div className="flex justify-between">
         <div>
-          <CardHeader>
-            <CardTitle>{title}</CardTitle>
-            <CardDescription>{employer.name}</CardDescription>
+          <CardHeader className="flex justify-between">
+            <div>
+              <CardTitle>{title}</CardTitle>
+              <CardDescription>{employer.name}</CardDescription>
+            </div>
+            <Button
+              variant="ghost"
+              onClick={() => toggleFavorite(id)}
+              className={isFavorite ? "text-red-500" : ""}
+            >
+              <HeartIcon
+                className={isFavorite ? "fill-red-500" : ""} 
+                size={18} 
+              />
+            </Button>
           </CardHeader>
           <Space size={24} />
           <CardContent className="flex justify-between">
             <p className="w-[60%]">{description}</p>
             <Button variant="outline">
-              <Link href={`/internship/${id}`}>
+              <Link href={`/internships/${id}`}>
                 Дэлгэрэнгүй
               </Link>
             </Button>
