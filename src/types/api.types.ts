@@ -64,3 +64,47 @@ export type UpdateInternshipType = {
   startDate?: Date;
   endDate?: Date;
 }
+
+export type CreateEducation = {
+  id?: number;
+  school: string;
+  degree: string;
+  fieldOfStudy?: string;
+  startDate: Date;
+  endDate?: Date;
+  description?: string;
+  location?: string;
+};
+
+export type CreateExperience = {
+  id?: number;
+  company: string;
+  position: string;
+  startDate: Date;
+  endDate?: Date;
+  description?: string;
+  location?: string;
+};
+
+export type CreateResume = {
+  title?: string;
+  summary?: string;
+  skills?: string;
+  languages?: string;
+  certifications?: string;
+  experiences?: CreateExperience[];
+  education?: CreateEducation[];
+};
+
+export type Resume = {
+  id: number;
+  title?: string;
+  summary?: string;
+  skills?: string;
+  languages?: string;
+  certifications?: string;
+  experiences?: CreateExperience[];
+  education?: CreateEducation[];
+  createdAt: string;
+  updatedAt: string;
+};

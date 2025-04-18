@@ -1,4 +1,4 @@
-import { CreateInternshipType, CredentialsType, RegisterUserType, UpdateInternshipType, UpdateUserType } from '@/types/api.types';
+import { CreateInternshipType, CreateResume, CredentialsType, RegisterUserType, Resume, UpdateInternshipType, UpdateUserType } from '@/types/api.types';
 import axios from 'axios';
 
 const api = axios.create({
@@ -50,6 +50,20 @@ export const favoritesAPI = {
   remove: (internshipId: number) => api.delete(`/api/favourites/${internshipId}`),
   getAll: () => api.get('/api/favourites'),
   check: (internshipId: number) => api.get(`/api/favourites/check/${internshipId}`),
+};
+
+export const resumeAPI = {
+  create: (resumeData: CreateResume) => 
+    api.post<Resume>('/api/resumes', resumeData),
+  
+  getById: (id: number) => 
+    api.get<Resume>(`/api/resumes/${id}`),
+  
+  getMyResume: () => 
+    api.get<Resume>('/api/resumes/student/my-resume'),
+  
+  update: (id: number, resumeData: CreateResume) => 
+    api.patch<Resume>(`/api/resumes/${id}`, resumeData),
 };
 
 export default api;
