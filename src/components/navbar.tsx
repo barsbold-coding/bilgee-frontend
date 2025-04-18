@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export function Navbar() {
   const { user, isAuthenticated } = useAuth();
   return (
-    <div className="px-4 py-4 flex justify-between">
+    <div className="px-4 py-4 flex justify-between bg-gray-100">
       <div>
         <Logo color="text-[#232C33]" />
       </div>

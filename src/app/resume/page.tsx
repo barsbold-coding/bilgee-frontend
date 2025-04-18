@@ -6,8 +6,6 @@ import { resumeAPI } from '@/lib/api';
 import { Resume } from '@/types/api.types';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-// import { Card, CardContent } from '@/components/ui/card';
-// import { formatDate } from '@/lib/utils'; // You might need to create this utility function
 
 export default function ResumeViewPage() {
   const router = useRouter();
@@ -58,12 +56,12 @@ export default function ResumeViewPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-6 print:hidden">
-        <h1 className="text-2xl font-bold">Resume Preview</h1>
+        <h1 className="text-2xl font-bold">Миний CV</h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleEdit}>
-            Edit Resume
+            CV засах
           </Button>
-          <Button onClick={handlePrint}>Print / Save PDF</Button>
+          <Button onClick={handlePrint}>Хэвлэх / PDF болгон хадгалах</Button>
         </div>
       </div>
 
