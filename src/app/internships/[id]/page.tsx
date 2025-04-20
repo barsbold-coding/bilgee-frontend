@@ -149,9 +149,7 @@ const InternshipDetail: React.FC = () => {
         </CardContent>
 
         <CardFooter className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Internship ID: {internship.id}
-          </div>
+          <div />
           <Button size="lg">Apply Now</Button>
         </CardFooter>
       </Card>

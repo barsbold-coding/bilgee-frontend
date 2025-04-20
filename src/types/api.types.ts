@@ -105,4 +105,5 @@ export type Resume = {
   education?: CreateEducation[];
   createdAt: string;
   updatedAt: string;
+  absent?: boolean;
 };

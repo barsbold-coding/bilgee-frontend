@@ -18,7 +18,7 @@ export function InternshipCard({ id, title, employer, description, isFavorite, t
   return (
     <Card>
       <div className="flex justify-between">
-        <div>
+        <div className="w-full">
           <CardHeader className="flex justify-between">
             <div>
               <CardTitle>{title}</CardTitle>

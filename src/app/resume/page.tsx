@@ -17,6 +17,7 @@ export default function ResumeViewPage() {
       try {
         const response = await resumeAPI.getMyResume();
         setResume(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('Failed to fetch resume:', error);
       } finally {
@@ -43,11 +44,13 @@ export default function ResumeViewPage() {
     );
   }
 
-  if (!resume) {
+  if (!resume) return
+
+  if (resume?.absent) {
     return (
       <div className="container mx-auto py-16 px-4 text-center">
         <h1 className="text-2xl font-bold mb-4">No Resume Found</h1>
-        <p className="mb-6">You haven't created a resume yet.</p>
+        <p className="mb-6">Танд одоогоор үүсгэсэн CV байхгүй байна.</p>
         <Button onClick={() => router.push('/resume/edit')}>Create Resume</Button>
       </div>
     );

@@ -19,7 +19,6 @@ export default function InternshipsPage() {
     const fetchData = async () => {
       try {
         const internshipsResponse = await internshipsAPI.getAll();
-        console.log(internshipsResponse.data);
         setInternships(internshipsResponse.data.rows);
         
         if (isAuthenticated && isStudent) {
