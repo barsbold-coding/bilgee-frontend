@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Space } from '@/components/space';
 import { HeartIcon, MapPinIcon, CalendarIcon, BanknoteIcon, ArrowLeftIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const InternshipDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +17,8 @@ const InternshipDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchInternshipDetails = async () => {
@@ -28,7 +30,7 @@ const InternshipDetail: React.FC = () => {
         
         // Check if this internship is favorited
         const favResponse = await favoritesAPI.check(internshipId);
-        setIsFavorite(favResponse.data);
+        setIsFavorite(favResponse.data.isFavorite);
       } catch (err) {
         console.error('Error fetching internship details:', err);
         setError('Failed to load internship details. Please try again later.');
@@ -87,7 +89,7 @@ const InternshipDetail: React.FC = () => {
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <Button 
         variant="ghost" 
-        onClick={() => {}} 
+        onClick={() => router.back()} 
         className="mb-6 flex items-center"
       >
         <ArrowLeftIcon className="mr-2" size={16} />
