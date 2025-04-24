@@ -24,3 +24,15 @@ export function formatDateRange(startDate: Date | string | undefined, endDate: D
   
   return `${start} - ${end}`;
 }
+
+export function qs(obj: any) {
+  const params = new URLSearchParams();
+  
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      params.append(key, value as string);
+    }
+  });
+  
+  return params.toString();
+}

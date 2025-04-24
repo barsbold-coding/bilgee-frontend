@@ -6,12 +6,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { InternshipType, UserRole } from '@/types/api.types';
 import { InternshipCard } from '@/components/internship-card';
 import RoleGuard from '@/components/role-guard';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { SearchIcon } from 'lucide-react';
 
 export default function InternshipsPage() {
   const [internships, setInternships] = useState<InternshipType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const { isAuthenticated, user } = useAuth();
   const isStudent = user?.role === 'student';
@@ -19,7 +24,10 @@ export default function InternshipsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const internshipsResponse = await internshipsAPI.getAll();
+        setLoading(true);
+        const internshipsResponse = await internshipsAPI.getAll({
+          title: searchQuery
+        });
         setInternships(internshipsResponse.data.rows);
         
         if (isAuthenticated && isStudent) {
@@ -38,7 +46,7 @@ export default function InternshipsPage() {
     };
 
     fetchData();
-  }, [isAuthenticated, isStudent]);
+  }, [isAuthenticated, isStudent, searchQuery]);
 
   const toggleFavorite = async (internshipId: number) => {
     try {
@@ -58,11 +66,29 @@ export default function InternshipsPage() {
     }
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchQuery(searchTerm);
+  };
+
   return (
     <RoleGuard allowedRoles={[UserRole.STUDENT]}>
       <div className="bg-gray-50 min-h-screen py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold mb-8">Зарлагдсан ажлын байрнууд</h1>
+          
+          <form onSubmit={handleSearch} className="flex gap-2 mb-6">
+            <Input
+              placeholder="Хайх дадлагын нэр..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1"
+            />
+            <Button type="submit">
+              <SearchIcon className="mr-2" size={16} />
+              Хайх
+            </Button>
+          </form>
           
           {loading ? (
             <div className="flex justify-center">
@@ -88,7 +114,11 @@ export default function InternshipsPage() {
               
               {internships.length === 0 && (
                 <div className="text-center py-10">
-                  <p className="text-gray-600 mb-4">Одоогоор идэвхтэй дадлагийн хөтөлөр байхгүй😢...</p>
+                  {searchQuery ? (
+                    <p className="text-gray-600 mb-4">Хайлтад тохирох дадлагийн хөтөлбөр олдсонгүй</p>
+                  ) : (
+                    <p className="text-gray-600 mb-4">Одоогоор идэвхтэй дадлагийн хөтөлөр байхгүй😢...</p>
+                  )}
                 </div>
               )}
             </div>
@@ -98,4 +128,3 @@ export default function InternshipsPage() {
     </RoleGuard>
   );
 }
-

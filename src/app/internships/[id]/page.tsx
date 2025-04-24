@@ -113,13 +113,13 @@ function InternshipDetail() {
       return (
         <Button size="lg" variant="outline" className="bg-green-50 text-green-600 border-green-200" disabled>
           <CheckCircleIcon className="mr-2" size={18} />
-          Application Approved
+          Хүсэлт зөвшөөрөгдсөн
         </Button>
       );
     } else if (applicationStatus === ApplicationStatus.REJECTED) {
       return (
         <Button size="lg" variant="outline" className="bg-red-50 text-red-600 border-red-200" disabled>
-          Application Rejected
+          Хүсэлт зөвшөөрөгдөөгүй
         </Button>
       );
     } else {
@@ -189,7 +189,7 @@ function InternshipDetail() {
                 className={isFavorite ? "fill-red-500" : ""} 
                 size={18} 
               />
-              <span className="ml-2">{isFavorite ? 'Saved' : 'Save'}</span>
+              <span className="ml-2">{isFavorite ? 'Хадгалсан' : 'Хадгалах'}</span>
             </Button>
           </div>
         </CardHeader>
@@ -215,7 +215,7 @@ function InternshipDetail() {
           </div>
 
           <div>
-            <h3 className="text-lg font-medium mb-2">Description</h3>
+            <h3 className="text-lg font-medium mb-2">Тайлбар</h3>
             <div className="prose max-w-none">
               {internship.description.split('\n').map((para, i) => (
                 <p key={i} className="mb-4">{para}</p>

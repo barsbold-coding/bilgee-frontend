@@ -44,6 +44,14 @@ export type InternshipType = {
   endDate: Date;
   employer: User;
 }
+
+export type InternshipQueryType = {
+  title?: string;
+  description?: string;
+  salaryRange?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
 export type CreateInternshipType = {
   title: string;
   description: string;
@@ -99,6 +107,7 @@ export type CreateResume = {
 
 export type Resume = {
   id: number;
+  studentId: number;
   title?: string;
   summary?: string;
   skills?: string;
@@ -123,4 +132,8 @@ export type Application = {
   status: ApplicationStatus;
   internship?: InternshipType
   createdAt: Date;
+}
+
+export type ApplicationUpdate = {
+  status?: ApplicationStatus;
 }

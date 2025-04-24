@@ -1,5 +1,6 @@
-import { CreateInternshipType, CreateResume, CredentialsType, RegisterUserType, Resume, UpdateInternshipType, UpdateUserType } from '@/types/api.types';
+import { ApplicationUpdate, CreateInternshipType, CreateResume, CredentialsType, InternshipQueryType, RegisterUserType, Resume, UpdateInternshipType, UpdateUserType } from '@/types/api.types';
 import axios from 'axios';
+import { qs } from './utils';
 
 const api = axios.create({
   baseURL: 'http://localhost:3000'
@@ -34,7 +35,7 @@ export const usersAPI = {
 // Internships
 export const internshipsAPI = {
   create: (internshipData: CreateInternshipType) => api.post('/api/internships', internshipData),
-  getAll: () => api.get('/api/internships'),
+  getAll: (query: InternshipQueryType) => api.get(`/api/internships?${qs(query)}`),
   getById: (id: number) => api.get(`/api/internships/${id}`),
   update: (id: number, internshipData: UpdateInternshipType) => api.patch(`/api/internships/${id}`, internshipData),
   delete: (id: number) => api.delete(`/api/internships/${id}`),
@@ -66,12 +67,19 @@ export const resumeAPI = {
 export const applicationsAPI = {
   create: (internshipId: number) => 
     api.post('/api/applications', { internshipId }),
+
+  getAll: () =>
+    api.get(`/api/applications`),
+  
+  update: (id: number, data: ApplicationUpdate) =>
+    api.patch(`/api/applications/${id}`, data),
   
   getByInternship: (internshipId: number) => 
     api.get(`/api/applications?internshipId=${internshipId}`),
   
   getOwn: () => 
     api.get('/api/applications/student/own'),
+  getApplicationResume: (id: number) => api.get(`/api/applications/${id}/resume`)
 };
 
 export default api;

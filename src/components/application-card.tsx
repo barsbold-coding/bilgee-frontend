@@ -17,7 +17,7 @@ export function ApplicationCard({ application }: { application: Application }) {
   const statusLabels = {
     pending: "Хүлээгдэж байна",
     approved: "Зөвшөөрөгдсөн",
-    rejected: "Буцаагдсан",
+    rejected: "Зөвшөөрөгдөөгүй",
   };
 
   return (
