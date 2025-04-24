@@ -1,22 +1,25 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { InternshipType } from '@/types/api.types';
-import { internshipsAPI, favoritesAPI } from '@/lib/api';
+import { Application, ApplicationStatus, InternshipType } from '@/types/api.types';
+import { internshipsAPI, favoritesAPI, applicationsAPI } from '@/lib/api';
 import { formatDateRange } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Space } from '@/components/space';
-import { HeartIcon, MapPinIcon, CalendarIcon, BanknoteIcon, ArrowLeftIcon } from 'lucide-react';
+import { HeartIcon, MapPinIcon, CalendarIcon, BanknoteIcon, ArrowLeftIcon, CheckCircleIcon } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
-const InternshipDetail: React.FC = () => {
+function InternshipDetail() {
   const { id } = useParams<{ id: string }>();
   const [internship, setInternship] = useState<InternshipType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState<ApplicationStatus | null>(null);
+  const [isApplying, setIsApplying] = useState(false);
 
   const router = useRouter();
 
@@ -30,7 +33,21 @@ const InternshipDetail: React.FC = () => {
         
         // Check if this internship is favorited
         const favResponse = await favoritesAPI.check(internshipId);
-        setIsFavorite(favResponse.data.isFavorite);
+        setFavorite(favResponse.data.isFavourite);
+        
+        // Check if user has already applied to this internship
+        try {
+          const res = await applicationsAPI.getByInternship(internshipId);
+          if (res.data && res.data.rows.length > 0) {
+            const [userApplication] = res.data.rows;
+            if (userApplication) {
+              setApplicationStatus(userApplication.status);
+            }
+          }
+        } catch (appErr) {
+          console.error('Error checking application status:', appErr);
+          // Non-critical error, continue without application status
+        }
       } catch (err) {
         console.error('Error fetching internship details:', err);
         setError('Failed to load internship details. Please try again later.');
@@ -54,11 +71,68 @@ const InternshipDetail: React.FC = () => {
       } else {
         await favoritesAPI.add(internship.id);
       }
-      setIsFavorite(!isFavorite);
+      setFavorite(!isFavorite);
     } catch (err) {
       console.error('Error toggling favorite status:', err);
     } finally {
       setFavLoading(false);
+    }
+  };
+
+  const handleApply = async () => {
+    if (!internship) return;
+    
+    try {
+      setIsApplying(true);
+      await applicationsAPI.create(internship.id);
+      setApplicationStatus(ApplicationStatus.PENDING);
+      toast("Application Submitted", {
+        description: "Your application has been successfully submitted.",
+        // variant: "default",
+      });
+    } catch (err) {
+      console.error('Error submitting application:', err);
+      toast("Application Failed", {
+        description: "Failed to submit your application. Please try again.",
+        // variant: "destructive",
+      });
+    } finally {
+      setIsApplying(false);
+    }
+  };
+
+  const getApplicationButton = () => {
+    if (applicationStatus === ApplicationStatus.PENDING) {
+      return (
+        <Button size="lg" variant="outline" disabled>
+          <CheckCircleIcon className="mr-2" size={18} />
+          Application Pending
+        </Button>
+      );
+    } else if (applicationStatus === ApplicationStatus.APPROVED) {
+      return (
+        <Button size="lg" variant="outline" className="bg-green-50 text-green-600 border-green-200" disabled>
+          <CheckCircleIcon className="mr-2" size={18} />
+          Application Approved
+        </Button>
+      );
+    } else if (applicationStatus === ApplicationStatus.REJECTED) {
+      return (
+        <Button size="lg" variant="outline" className="bg-red-50 text-red-600 border-red-200" disabled>
+          Application Rejected
+        </Button>
+      );
+    } else {
+      return (
+        <Button 
+          size="lg" 
+          onClick={handleApply} 
+          disabled={isApplying}
+        >
+          {isApplying ? <Spinner size="sm" className="mr-2" /> : null}
+          Apply Now
+        </Button>
+      );
     }
   };
 
@@ -78,7 +152,7 @@ const InternshipDetail: React.FC = () => {
             <h3 className="text-lg font-medium">Error</h3>
             <p className="text-muted-foreground">{error || 'Internship not found'}</p>
             <Space size={16} />
-            <Button onClick={() => {}}>Go Back</Button>
+            <Button onClick={() => router.back()}>Go Back</Button>
           </div>
         </CardContent>
       </Card>
@@ -152,7 +226,7 @@ const InternshipDetail: React.FC = () => {
 
         <CardFooter className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
           <div />
-          <Button size="lg">Apply Now</Button>
+          {getApplicationButton()}
         </CardFooter>
       </Card>
     </div>

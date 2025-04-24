@@ -66,4 +66,15 @@ export const resumeAPI = {
     api.patch<Resume>(`/api/resumes/${id}`, resumeData),
 };
 
+export const applicationsAPI = {
+  create: (internshipId: number) => 
+    api.post('/api/applications', { internshipId }),
+  
+  getByInternship: (internshipId: number) => 
+    api.get(`/api/applications?internshipId=${internshipId}`),
+  
+  getOwn: () => 
+    api.get('/api/applications/student/own'),
+};
+
 export default api;

@@ -1,4 +1,4 @@
-enum UserRole {
+export enum UserRole {
   STUDENT = 'student',
   ORGANISATION = 'organisation',
   ADMIN = 'admin',
@@ -10,7 +10,7 @@ export type User = {
   email: string;
   phoneNumber: string;
   password: string;
-  role?: UserRole;
+  role: UserRole;
 }
 
 export type RegisterUserType = {
@@ -107,3 +107,16 @@ export type Resume = {
   updatedAt: string;
   absent?: boolean;
 };
+
+export enum ApplicationStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+}
+
+export type Application = {
+  id: number;
+  internshipId: number;
+  status: ApplicationStatus;
+  createdAt: Date;
+}

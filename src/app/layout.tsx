@@ -5,6 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { usePathname } from "next/navigation";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             {children}
+            <Toaster />
           </AuthProvider>
         </body>
       </html>
