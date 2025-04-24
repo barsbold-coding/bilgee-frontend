@@ -8,6 +8,7 @@ import { ResumeForm } from '@/components/resume/resume-form';
 import { resumeAPI } from '@/lib/api';
 import { CreateResume, Resume } from '@/types/api.types';
 import { Spinner } from '@/components/ui/spinner'; // You'll need to create this component
+import { toast } from 'sonner';
 
 export default function ResumePage() {
   const { isAuthenticated, user } = useAuth();
@@ -46,12 +47,13 @@ export default function ResumePage() {
         const response = await resumeAPI.create(resumeData);
         setResume(response.data);
       }
-      alert('Resume saved successfully!');
+      toast('Таны CV амжилтай хадгалагдлаа');
     } catch (error) {
       console.error('Failed to save resume:', error);
-      alert('Failed to save resume. Please try again.');
+      toast('Алдаа гарлаа дахин оролдоно уу!');
     } finally {
       setSaving(false);
+      router.replace('/resume');
     }
   };
 

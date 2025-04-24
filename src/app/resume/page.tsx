@@ -17,7 +17,6 @@ export default function ResumeViewPage() {
       try {
         const response = await resumeAPI.getMyResume();
         setResume(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Failed to fetch resume:', error);
       } finally {
@@ -76,7 +75,6 @@ export default function ResumeViewPage() {
           {resume.summary && <p className="text-gray-700">{resume.summary}</p>}
         </div>
 
-        {/* Experience Section */}
         {resume.experiences && resume.experiences.length > 0 && (
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Work Experience</h2>
@@ -116,7 +114,6 @@ export default function ResumeViewPage() {
           </div>
         )}
 
-        {/* Education Section */}
         {resume.education && resume.education.length > 0 && (
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Education</h2>
@@ -125,7 +122,7 @@ export default function ResumeViewPage() {
                 <div key={index} className="mb-4">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-semibold text-lg">{edu.school}</h3>
+                      <h3 className="font-semibold text-lg">{edu.institution}</h3>
                       <h4 className="text-gray-700">
                         {edu.degree}
                         {edu.fieldOfStudy && `, ${edu.fieldOfStudy}`}

@@ -49,9 +49,9 @@ export const EducationForm: React.FC<EducationFormProps> = ({
               School
             </label>
             <Input
-              id="school"
-              name="school"
-              value={education.school || ''}
+              id="institution"
+              name="institution"
+              value={education.institution || ''}
               onChange={handleChange}
               placeholder="University or school name"
               required

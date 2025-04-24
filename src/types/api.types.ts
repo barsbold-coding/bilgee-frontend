@@ -65,13 +65,16 @@ export type UpdateInternshipType = {
 
 export type CreateEducation = {
   id?: number;
-  school: string;
+  resumeId: number;
+  resume: Resume;
+  institution: string;
   degree: string;
-  fieldOfStudy?: string;
+  fieldOfStudy: string;
   startDate: Date;
-  endDate?: Date;
-  description?: string;
-  location?: string;
+  endDate: Date;
+  grade: string;
+  description: string;
+  location: string;
 };
 
 export type CreateExperience = {
