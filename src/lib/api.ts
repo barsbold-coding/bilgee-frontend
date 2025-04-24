@@ -29,9 +29,6 @@ export const usersAPI = {
   getById: (id: number) => api.get(`/api/users/${id}`),
   update: (id: number, userData: UpdateUserType) => api.patch(`/api/users/${id}`, userData),
   delete: (id: string) => api.delete(`/api/users/${id}`),
-  getStudentDashboard: () => api.get('/api/users/student/dashboard'),
-  getOrganisationDashboard: () => api.get('/api/users/organisation/dashboard'),
-  getAdminDashboard: () => api.get('/api/users/admin/dashboard'),
 };
 
 // Internships
