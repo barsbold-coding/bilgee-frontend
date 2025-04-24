@@ -1,4 +1,3 @@
-// src/app/login/page.tsx
 'use client'
 
 import { useState } from 'react';
@@ -22,8 +21,13 @@ export default function Login() {
     setIsLoading(true);
     
     try {
-      await login(email, password);
-      router.push('/');
+      const user = await login(email, password);
+      // Check user role and navigate accordingly
+      if (user?.role === 'organisation') {
+        router.push('/org');
+      } else {
+        router.push('/');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
     } finally {

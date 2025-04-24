@@ -12,6 +12,7 @@ import RoleGuard from '@/components/role-guard';
 import { UserRole } from '@/types/api.types';
 import { toast } from 'sonner';
 import { Space } from '@/components/space';
+import { ArrowLeftIcon } from 'lucide-react';
 
 export default function OrganizationApplications() {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -34,14 +35,12 @@ export default function OrganizationApplications() {
     };
 
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   const updateApplicationStatus = async (appId: number, status: ApplicationStatus) => {
     try {
-      // Note: You'll need to add this API endpoint
       await applicationsAPI.update(appId, { status });
       
-      // Update local state to reflect the change
       setApplications(applications.map(app => 
         app.id === appId ? { ...app, status } : app
       ));
@@ -60,8 +59,13 @@ export default function OrganizationApplications() {
   return (
     <RoleGuard allowedRoles={[UserRole.ORGANISATION]}>
       <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-6">Өргөдлүүд</h1>
-        
+        <div className="flex flex-row justify-between">
+          <h1 className="text-2xl font-bold mb-6">Өргөдлүүд</h1>
+          <Button variant="outline" onClick={() => router.back()}>
+            <ArrowLeftIcon />
+            Буцах
+          </Button>
+        </div>
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <Spinner size="lg" />
