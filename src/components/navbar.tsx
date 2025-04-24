@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 export function Navbar() {
   const { user, isAuthenticated } = useAuth();
@@ -16,15 +16,15 @@ export function Navbar() {
       {isAuthenticated ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild><Button>{user?.name}</Button></DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="z-100">
             <DropdownMenuItem>
-              <Button className="w-full" variant="ghost">
+              <Button className="w-full z-100" variant="ghost">
                 <Link href="/resume">Миний CV</Link>
               </Button>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button className="w-full" variant="ghost">
-                <Link href="/">Миний дадлага</Link>
+            <DropdownMenuItem className="z-100">
+              <Button className="w-full z-100" variant="ghost">
+                <Link href="/applications">Миний хүсэлтүүд</Link>
               </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>

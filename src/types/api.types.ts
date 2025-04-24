@@ -118,5 +118,6 @@ export type Application = {
   id: number;
   internshipId: number;
   status: ApplicationStatus;
+  internship?: InternshipType
   createdAt: Date;
 }
