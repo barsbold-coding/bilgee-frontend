@@ -35,7 +35,10 @@ export const usersAPI = {
 // Internships
 export const internshipsAPI = {
   create: (internshipData: CreateInternshipType) => api.post('/api/internships', internshipData),
-  getAll: (query: InternshipQueryType) => api.get(`/api/internships?${qs(query)}`),
+  getAll: (query?: InternshipQueryType) => {
+    if (!query) return api.get(`/api/internships`);
+    return api.get(`/api/internships?${qs(query)}`);
+  },
   getById: (id: number) => api.get(`/api/internships/${id}`),
   update: (id: number, internshipData: UpdateInternshipType) => api.patch(`/api/internships/${id}`, internshipData),
   delete: (id: number) => api.delete(`/api/internships/${id}`),
@@ -68,8 +71,12 @@ export const applicationsAPI = {
   create: (internshipId: number) => 
     api.post('/api/applications', { internshipId }),
 
-  getAll: () =>
-    api.get(`/api/applications`),
+  getAll: (query?: any) => {
+    if (!query) {
+      return api.get(`/api/applications`);
+    }
+    return api.get(`/api/applications?${qs(query)}`);
+  },
   
   update: (id: number, data: ApplicationUpdate) =>
     api.patch(`/api/applications/${id}`, data),

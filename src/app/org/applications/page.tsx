@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { applicationsAPI } from '@/lib/api';
 import { Application, ApplicationStatus } from '@/types/api.types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -17,13 +17,13 @@ export default function OrganizationApplications() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-
-        const res = await applicationsAPI.getAll();
+        const res = await applicationsAPI.getAll({ internshipId: searchParams.get('internshipId') });
         setApplications(res.data.rows);
       } catch (error) {
         console.error('Failed to fetch applications:', error);

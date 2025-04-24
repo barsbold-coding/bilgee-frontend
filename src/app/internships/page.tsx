@@ -8,7 +8,8 @@ import { InternshipCard } from '@/components/internship-card';
 import RoleGuard from '@/components/role-guard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon, BookmarkIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export default function InternshipsPage() {
   const [internships, setInternships] = useState<InternshipType[]>([]);
@@ -75,7 +76,16 @@ export default function InternshipsPage() {
     <RoleGuard allowedRoles={[UserRole.STUDENT]}>
       <div className="bg-gray-50 min-h-screen py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8">Зарлагдсан ажлын байрнууд</h1>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+            <h1 className="text-3xl font-bold mb-4 sm:mb-0">Зарлагдсан ажлын байрнууд</h1>
+            
+            <Link href="/favorites">
+              <Button variant="outline">
+                <BookmarkIcon className="mr-2" size={16} />
+                Миний хадгалсан дадлагууд
+              </Button>
+            </Link>
+          </div>
           
           <form onSubmit={handleSearch} className="flex gap-2 mb-6">
             <Input

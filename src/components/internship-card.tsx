@@ -22,7 +22,7 @@ export function InternshipCard({ id, title, employer, description, isFavorite, t
           <CardHeader className="flex justify-between">
             <div>
               <CardTitle>{title}</CardTitle>
-              <CardDescription>{employer.name}</CardDescription>
+              <CardDescription>{employer?.name}</CardDescription>
             </div>
             <Button
               variant="ghost"
