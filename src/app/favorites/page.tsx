@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function FavoritesPage() {
   const [favoriteInternships, setFavoriteInternships] = useState<InternshipType[]>([]);
@@ -17,6 +18,7 @@ export default function FavoritesPage() {
   const [error, setError] = useState('');
   const { isAuthenticated, user } = useAuth();
   const isStudent = user?.role === 'student';
+  const router = useRouter();
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -55,14 +57,12 @@ export default function FavoritesPage() {
     <RoleGuard allowedRoles={[UserRole.STUDENT]}>
       <div className="bg-gray-50 min-h-screen py-12">
         <div className="container mx-auto px-4">
-          <div className="flex items-center mb-6">
-            <Link href="/internships">
-              <Button variant="ghost" className="mr-2">
-                <ArrowLeft className="mr-1" size={16} />
-                Ажлын байранд буцах
-              </Button>
-            </Link>
+          <div className="flex items-center mb-6 justify-between">
             <h1 className="text-3xl font-bold">Миний хадгалсан дадлагууд</h1>
+            <Button variant="outline" className="mr-2" onClick={() => router.back()}>
+              <ArrowLeft className="mr-1" size={16} />
+              Буцах
+            </Button>
           </div>
           
           {loading ? (

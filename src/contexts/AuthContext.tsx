@@ -61,11 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const register = async (userData: RegisterUserType) => {
     setLoading(true);
     try {
-      const { data } = await authAPI.register(userData);
-      localStorage.setItem('token', data.token);
-      const userResponse = await usersAPI.getProfile();
-      setUser(userResponse.data);
-      setAuthenticated(true);
+      await authAPI.register(userData);
     } catch (error) {
       throw error;
     } finally {

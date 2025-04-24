@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Application, ApplicationStatus, InternshipType } from '@/types/api.types';
+import { ApplicationStatus, InternshipType } from '@/types/api.types';
 import { internshipsAPI, favoritesAPI, applicationsAPI } from '@/lib/api';
 import { formatDateRange } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -92,9 +92,8 @@ function InternshipDetail() {
       });
     } catch (err) {
       console.error('Error submitting application:', err);
-      toast("Application Failed", {
+      toast.error("Application Failed", {
         description: "Failed to submit your application. Please try again.",
-        // variant: "destructive",
       });
     } finally {
       setIsApplying(false);
@@ -162,12 +161,12 @@ function InternshipDetail() {
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <Button 
-        variant="ghost" 
+        variant="outline" 
         onClick={() => router.back()} 
         className="mb-6 flex items-center"
       >
         <ArrowLeftIcon className="mr-2" size={16} />
-        Back to listings
+        Буцах
       </Button>
 
       <Card className="overflow-hidden">

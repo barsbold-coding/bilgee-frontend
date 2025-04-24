@@ -1,152 +1,123 @@
-// src/app/register/page.tsx
 'use client'
 
-import { useState } from 'react';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { UserRole } from '@/types/api.types';
+import { toast } from 'sonner';
+
+const registerSchema = z.object({
+  name: z.string().min(1, 'Нэр шаардлагатай'),
+  email: z.string().email('Зөв и-мэйл хаяг оруулна уу'),
+  phoneNumber: z.string().min(1, 'Утасны дугаар шаардлагатай'),
+  password: z.string().min(6, 'Нууц үг дор хаяж 6 тэмдэгт байх ёстой'),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Нууц үгнүүд таарахгүй байна',
+  path: ['confirmPassword'],
+});
+
+type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function Register() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: '',
-    role: UserRole.STUDENT,
-  });
-  
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  
   const router = useRouter();
-  const { register } = useAuth();
+  const { register: registerUser } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    mode: 'onChange',
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const onSubmit = async (data: RegisterFormData) => {
+    const { confirmPassword, ...submitData } = data;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError('Нууц үгнүүд таарахгүй байна.');
-      return;
-    }
-    
-    setIsLoading(true);
-    
     try {
-      // Register user with the form data (excluding confirmPassword)
-      const { confirmPassword, ...registerData } = formData;
-      await register(registerData);
-      router.push('/');
+      await registerUser({
+        ...submitData,
+        role: UserRole.STUDENT,
+      });
+      toast.success("Амжилттай бүртгэгдлээ");
+      router.push('/login');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Бүртгэл үүсгэхэд алдаа гарлаа.');
-    } finally {
-      setIsLoading(false);
+      const message = err.response?.data?.message || 'Бүртгэл үүсгэхэд алдаа гарлаа.';
+      alert(message);
     }
   };
 
   return (
-    <>
-      <div className="flex min-h-screen bg-gray-50 py-12">
-        <div className="max-w-md w-full mx-auto bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-2xl font-bold text-center mb-6">Бүртгүүлэх</h1>
-          
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
+    <div className="flex items-center justify-center min-h-screen bg-muted">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">Бүртгүүлэх</CardTitle>
+        </CardHeader>
+        <CardContent>
+         {Object.keys(errors).length > 0 && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertTitle>Мэдээлэл дутуу байна</AlertTitle>
+              <AlertDescription>
+                Бүх талбарыг зөв бөглөсөн эсэхийг шалгана уу.
+              </AlertDescription>
+            </Alert>
           )}
-          
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Нэр</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Нэр</Label>
+              <Input id="name" {...register('name')} />
+              {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>}
             </div>
-            
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">И-майл хаяг</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+
+            <div>
+              <Label htmlFor="email">И-мэйл хаяг</Label>
+              <Input id="email" type="email" {...register('email')} />
+              {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
             </div>
-            
-            <div className="mb-4">
-              <label htmlFor="phoneNumber" className="block text-gray-700 text-sm font-bold mb-2">Утасны дугаар</label>
-              <input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+
+            <div>
+              <Label htmlFor="phoneNumber">Утасны дугаар</Label>
+              <Input id="phoneNumber" type="tel" {...register('phoneNumber')} />
+              {errors.phoneNumber && <p className="text-sm text-red-500 mt-1">{errors.phoneNumber.message}</p>}
             </div>
-            
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Нууц үг</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+
+            <div>
+              <Label htmlFor="password">Нууц үг</Label>
+              <Input id="password" type="password" {...register('password')} />
+              {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>}
             </div>
-            
-            <div className="mb-6">
-              <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-bold mb-2">Нууц үг баталгаажуулах</label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+
+            <div>
+              <Label htmlFor="confirmPassword">Нууц үг баталгаажуулах</Label>
+              <Input id="confirmPassword" type="password" {...register('confirmPassword')} />
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-500 mt-1">{errors.confirmPassword.message}</p>
+              )}
             </div>
-            
-            <Button
-              className="w-full bg-[#5C9DFF]"
-              disabled={isLoading}
-            >{isLoading ? "Бүртгэж байна..." : "Бүртгүүлэх"}</Button>
+
+            <Button type="submit" className="w-full" disabled={!isValid || isSubmitting}>
+              {isSubmitting ? 'Бүртгэж байна...' : 'Бүртгүүлэх'}
+            </Button>
           </form>
-          
-          <div className="text-center mt-4">
-            <p className="text-gray-600">
-              Бүртгэлтэй хэрэглэгч юу?{' '}
-              <Link href="/login" className="text-blue-600 hover:text-blue-700">
-                Нэвтрэх
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Бүртгэлтэй хэрэглэгч үү?{' '}
+            <Link href="/login" className="text-primary hover:underline">
+              Нэвтрэх
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
+
