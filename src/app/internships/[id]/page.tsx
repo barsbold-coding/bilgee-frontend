@@ -170,7 +170,7 @@ function InternshipDetail() {
       </Button>
 
       <Card className="overflow-hidden">
-        <div className="bg-primary h-16 w-full"></div>
+        <div className="bg-[#3B85F6] h-16 w-full"></div>
 
         <CardHeader className="pt-6">
           <div className="flex justify-between items-start">

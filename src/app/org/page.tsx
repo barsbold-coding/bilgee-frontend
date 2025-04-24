@@ -37,7 +37,7 @@ export default function OrganizationDashboard() {
             <Button 
               className="w-full h-40 text-xl bg-[#5C9DFF] hover:bg-blue-600 transition-colors"
             >
-              Өргөдөлүүд
+              Хүсэлтүүд
             </Button>
           </Link>
           
