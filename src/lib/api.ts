@@ -40,6 +40,7 @@ export const usersAPI = {
   getProfile: () => api.get('/api/users/profile'),
   getById: (id: number) => api.get(`/api/users/${id}`),
   getOrgs: (query: UserQueryType) => api.get(`/api/users/organisations${qs(query)}`),
+  approve: (id: number) => api.post(`/api/users/${id}/approve`),
   update: (id: number, userData: UpdateUserType) => api.patch(`/api/users/${id}`, userData),
   delete: (id: string) => api.delete(`/api/users/${id}`),
 };
