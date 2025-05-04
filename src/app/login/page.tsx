@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { UserRole } from '@/types/api.types';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,8 +30,10 @@ export default function Login() {
     try {
       const user = await login(email, password);
       toast.success("Амжилттай нэвтэрлээ");
-      if (user?.role === 'organisation') {
+      if (user?.role === UserRole.ORGANISATION) {
         router.push('/org');
+      } else if (user?.role === UserRole.ADMIN) {
+        router.push('/admin');
       } else {
         router.push('/');
       }
