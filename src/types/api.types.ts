@@ -10,7 +10,12 @@ export type User = {
   email: string;
   phoneNumber: string;
   password: string;
+  verified: boolean;
   role: UserRole;
+}
+
+export type UserQueryType = {
+  verified?: boolean;
 }
 
 export type RegisterUserType = {

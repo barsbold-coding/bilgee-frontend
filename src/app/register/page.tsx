@@ -1,7 +1,7 @@
 'use client'
 
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { z, ZodType } from 'zod';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -14,6 +14,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { UserRole } from '@/types/api.types';
 import { toast } from 'sonner';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const registerSchema = z.object({
   name: z.string().min(1, 'Нэр шаардлагатай'),
@@ -21,6 +22,7 @@ const registerSchema = z.object({
   phoneNumber: z.string().min(1, 'Утасны дугаар шаардлагатай'),
   password: z.string().min(6, 'Нууц үг дор хаяж 6 тэмдэгт байх ёстой'),
   confirmPassword: z.string(),
+  isOrg: z.boolean(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Нууц үгнүүд таарахгүй байна',
   path: ['confirmPassword'],
@@ -34,19 +36,23 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting, isValid },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      isOrg: false,
+    },
     mode: 'onChange',
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    const { confirmPassword, ...submitData } = data;
+    const { confirmPassword, isOrg, ...submitData } = data;
 
     try {
       await registerUser({
         ...submitData,
-        role: UserRole.STUDENT,
+        role: isOrg ? UserRole.ORGANISATION : UserRole.STUDENT,
       });
       toast.success("Амжилттай бүртгэгдлээ");
       router.push('/login');
@@ -104,7 +110,21 @@ export default function Register() {
                 <p className="text-sm text-red-500 mt-1">{errors.confirmPassword.message}</p>
               )}
             </div>
-
+            <Controller
+              name="isOrg"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <div className="flex gap-2">
+                  <Checkbox
+                    id="isOrg"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  <Label htmlFor="isOrg">Байгууллага</Label>
+                </div>
+              )}
+            />
             <Button type="submit" className="w-full" disabled={!isValid || isSubmitting}>
               {isSubmitting ? 'Бүртгэж байна...' : 'Бүртгүүлэх'}
             </Button>

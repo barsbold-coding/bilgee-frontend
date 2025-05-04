@@ -1,4 +1,15 @@
-import { ApplicationUpdate, CreateInternshipType, CreateResume, CredentialsType, InternshipQueryType, RegisterUserType, Resume, UpdateInternshipType, UpdateUserType } from '@/types/api.types';
+import {
+  ApplicationUpdate,
+  CreateInternshipType,
+  CreateResume,
+  CredentialsType,
+  InternshipQueryType,
+  RegisterUserType,
+  Resume,
+  UpdateInternshipType,
+  UpdateUserType,
+  UserQueryType
+} from '@/types/api.types';
 import axios from 'axios';
 import { qs } from './utils';
 
@@ -28,6 +39,7 @@ export const usersAPI = {
   getAll: () => api.get('/api/users'),
   getProfile: () => api.get('/api/users/profile'),
   getById: (id: number) => api.get(`/api/users/${id}`),
+  getOrgs: (query: UserQueryType) => api.get(`/api/users/organisations${qs(query)}`),
   update: (id: number, userData: UpdateUserType) => api.patch(`/api/users/${id}`, userData),
   delete: (id: string) => api.delete(`/api/users/${id}`),
 };
@@ -37,7 +49,7 @@ export const internshipsAPI = {
   create: (internshipData: CreateInternshipType) => api.post('/api/internships', internshipData),
   getAll: (query?: InternshipQueryType) => {
     if (!query) return api.get(`/api/internships`);
-    return api.get(`/api/internships?${qs(query)}`);
+    return api.get(`/api/internships${qs(query)}`);
   },
   getById: (id: number) => api.get(`/api/internships/${id}`),
   update: (id: number, internshipData: UpdateInternshipType) => api.patch(`/api/internships/${id}`, internshipData),
