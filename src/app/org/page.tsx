@@ -26,6 +26,14 @@ export default function OrganizationDashboard() {
     return null; // Don't render anything while checking auth
   }
 
+  if (!user?.verified) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-50 py-12">
+        Та админ таны бүртгэлийг баталгаажуулах хүртэл түр хүлээнэ үү.
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl w-full mx-auto px-4">
