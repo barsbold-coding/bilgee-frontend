@@ -18,7 +18,6 @@ const OrganizationsPage = () => {
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
 
-  // Check if user is admin
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || user?.role !== UserRole.ADMIN)) {
       toast("Access Denied", {
@@ -28,13 +27,11 @@ const OrganizationsPage = () => {
     }
   }, [isAuthenticated, user, isLoading, router]);
 
-  // Fetch organizations
   useEffect(() => {
     const fetchOrganizations = async () => {
       setIsLoading(true);
       try {
         const { data } = await usersAPI.getOrgs({});
-        // Filter only organizations
         setOrganizations(data.rows);
       } catch (error) {
         console.error("Failed to fetch organizations:", error);
@@ -49,12 +46,13 @@ const OrganizationsPage = () => {
     fetchOrganizations();
   }, []);
 
-  // Handle organization verification
   const handleVerification = async (id: number, verified: boolean) => {
     try {
-      await usersAPI.approve(id);
+      if (verified)
+        await usersAPI.approve(id);
+      else 
+        await usersAPI.delete(id);
       
-      // Update local state to reflect changes
       setOrganizations(prevOrgs => 
         prevOrgs.map(org => 
           org.id === id ? { ...org, verified } : org
@@ -72,7 +70,6 @@ const OrganizationsPage = () => {
     }
   };
 
-  // Filter organizations based on active tab
   const filteredOrganizations = organizations.filter(org => {
     if (activeTab === 'all') return true;
     if (activeTab === 'verified') return org.verified;
