@@ -28,8 +28,8 @@ export default function OrganizationDashboard() {
 
   if (!user?.verified) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-50 py-12">
-        Та админ таны бүртгэлийг баталгаажуулах хүртэл түр хүлээнэ үү.
+      <div className="flex flex-col min-h-screen bg-gray-50 py-12 justify-center items-center">
+        <h1>Та админ таны бүртгэлийг баталгаажуулах хүртэл түр хүлээнэ үү.</h1>
       </div>
     )
   }
