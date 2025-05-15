@@ -3,17 +3,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { internshipsAPI } from '@/lib/api';
-import { Internship, UserRole } from '@/types/api.types';
+import { InternshipType, UserRole } from '@/types/api.types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { formatDateRange } from '@/lib/utils';
 import RoleGuard from '@/components/role-guard';
 import { toast } from 'sonner';
-import { PlusIcon, UserIcon } from 'lucide-react';
+import { ArrowLeftIcon, PlusIcon, UserIcon } from 'lucide-react';
 
 export default function OrganizationInternships() {
-  const [internships, setInternships] = useState<Internship[]>([]);
+  const [internships, setInternships] = useState<InternshipType[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -51,10 +51,16 @@ export default function OrganizationInternships() {
       <div className="container mx-auto py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Миний дадлагууд</h1>
-          <Button onClick={handleCreateInternship}>
-            <PlusIcon className="size-4 mr-2" />
-            Шинэ дадлага үүсгэх
-          </Button>
+          <div className="flex items-center justify-between mb-6 gap-2">
+            <Button variant="outline" onClick={() => {router.back()}}>
+              <ArrowLeftIcon className="size-4 mr-2" />
+              Буцах
+            </Button>
+            <Button onClick={handleCreateInternship}>
+              <PlusIcon className="size-4 mr-2" />
+              Шинэ дадлага үүсгэх
+            </Button>
+          </div>
         </div>
         
         {loading ? (

@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ExperienceForm } from './experience-form';
 import { EducationForm } from './education-form';
 import { CreateResume, Resume, CreateExperience, CreateEducation } from '@/types/api.types';
+import { ArrowLeftIcon } from 'lucide-react';
 
 interface ResumeFormProps {
   initialData?: Resume;
@@ -67,10 +68,14 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ initialData, onSubmit, i
       education: [
         ...(prev.education || []),
         {
-          school: '',
+          institution: '',
+          description: '',
           degree: '',
-          startDate: new Date(),
           fieldOfStudy: '',
+          startDate: new Date(),
+          endDate: new Date(),
+          grade: '',
+          location: '',
         },
       ],
     }));
@@ -154,7 +159,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ initialData, onSubmit, i
           </div>
         ) : (
           <div className="text-center py-4 text-muted-foreground">
-            No experience added yet. Click "Add Experience" to get started.
+            No experience added yet. Click &quot;Add Experience&quot; to get started.
           </div>
         )}
       </div>
@@ -235,9 +240,13 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ initialData, onSubmit, i
         </div>
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-end pt-4 gap-2">
+        <Button variant="outline" onClick={() => {}}>
+          <ArrowLeftIcon />
+          Буцах
+        </Button>
         <Button type="submit" disabled={isSaving}>
-          {isSaving ? 'Saving...' : 'Save Resume'}
+          {isSaving ? 'Хадгалаж байна...' : 'Хадгалах'}
         </Button>
       </div>
     </form>

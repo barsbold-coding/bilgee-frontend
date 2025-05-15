@@ -85,8 +85,7 @@ export type UpdateInternshipType = {
 
 export type CreateEducation = {
   id?: number;
-  resumeId: number;
-  resume: Resume;
+  resumeId?: number;
   institution: string;
   degree: string;
   fieldOfStudy: string;
