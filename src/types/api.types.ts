@@ -3,6 +3,11 @@ export enum UserRole {
   ORGANISATION = 'organisation',
   ADMIN = 'admin',
 }
+export enum UserStatus {
+  VERIFIED = 'verified',
+  PENDING  = 'pending',
+  DECLINED = 'declined'
+}
 
 export type User = {
   id: number;
@@ -10,7 +15,7 @@ export type User = {
   email: string;
   phoneNumber: string;
   password: string;
-  verified: boolean;
+  status: UserStatus;
   role: UserRole;
 }
 
@@ -47,6 +52,8 @@ export type InternshipType = {
   salaryRange?: string;
   startDate: Date;
   endDate: Date;
+  status: 'active' | 'inactive';
+  applicationCount: number;
   employer: User;
 }
 

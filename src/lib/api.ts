@@ -41,6 +41,7 @@ export const usersAPI = {
   getById: (id: number) => api.get(`/api/users/${id}`),
   getOrgs: (query: UserQueryType) => api.get(`/api/users/organisations${qs(query)}`),
   approve: (id: number) => api.post(`/api/users/${id}/approve`),
+  decline: (id: number) => api.post(`/api/users/${id}/decline`),
   update: (id: number, userData: UpdateUserType) => api.patch(`/api/users/${id}`, userData),
   delete: (id: number) => api.delete(`/api/users/${id}`),
 };
@@ -85,10 +86,7 @@ export const applicationsAPI = {
     api.post('/api/applications', { internshipId }),
 
   getAll: (query?: any) => {
-    if (!query) {
-      return api.get(`/api/applications`);
-    }
-    return api.get(`/api/applications?${qs(query)}`);
+    return api.get(`/api/applications${qs(query)}`);
   },
   
   update: (id: number, data: ApplicationUpdate) =>

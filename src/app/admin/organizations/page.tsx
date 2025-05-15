@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { usersAPI } from '@/lib/api';
-import { User, UserRole } from '@/types/api.types';
+import { User, UserRole, UserStatus } from '@/types/api.types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
 const OrganizationsPage = () => {
@@ -51,7 +51,7 @@ const OrganizationsPage = () => {
       if (verified)
         await usersAPI.approve(id);
       else 
-        await usersAPI.delete(id);
+        await usersAPI.decline(id);
       
       setOrganizations(prevOrgs => 
         prevOrgs.map(org => 
@@ -72,8 +72,9 @@ const OrganizationsPage = () => {
 
   const filteredOrganizations = organizations.filter(org => {
     if (activeTab === 'all') return true;
-    if (activeTab === 'verified') return org.verified;
-    if (activeTab === 'unverified') return !org.verified;
+    if (activeTab === 'verified') return org.status === UserStatus.VERIFIED;
+    if (activeTab === 'pending') return org.status === UserStatus.PENDING;
+    if (activeTab === 'declined') return org.status === UserStatus.DECLINED;
     return true;
   });
 
@@ -97,10 +98,11 @@ const OrganizationsPage = () => {
         className="mb-6"
         onValueChange={(value) => setActiveTab(value)}
       >
-        <TabsList className="grid w-full grid-cols-3 max-w-md">
+        <TabsList className="grid w-full grid-cols-4 max-w-md">
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="verified">Verified</TabsTrigger>
-          <TabsTrigger value="unverified">Unverified</TabsTrigger>
+          <TabsTrigger value="pending">Pending</TabsTrigger>
+          <TabsTrigger value="declined">Declined</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -115,8 +117,8 @@ const OrganizationsPage = () => {
               <CardHeader className="bg-slate-50">
                 <div className="flex justify-between items-start">
                   <CardTitle className="text-xl">{org.name}</CardTitle>
-                  <Badge variant={org.verified ? "default" : "outline"}>
-                    {org.verified ? "Verified" : "Pending"}
+                  <Badge variant={org.status ? "default" : "outline"}>
+                    {org.status}
                   </Badge>
                 </div>
               </CardHeader>
@@ -132,7 +134,7 @@ const OrganizationsPage = () => {
                   </div>
                 </div>
                 
-                {!org.verified && (
+                {org.status === UserStatus.PENDING && (
                   <div className="flex gap-4 mt-6">
                     <Button 
                       variant="default" 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { UserRole } from '@/types/api.types';
+import { UserRole, UserStatus } from '@/types/api.types';
 
 export default function OrganizationDashboard() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function OrganizationDashboard() {
     return null; // Don't render anything while checking auth
   }
 
-  if (!user?.verified) {
+  if (user?.status !== UserStatus.VERIFIED) {
     return (
       <div className="flex flex-col min-h-screen bg-gray-50 py-12 justify-center items-center">
         <h1>Та админ таны бүртгэлийг баталгаажуулах хүртэл түр хүлээнэ үү.</h1>
