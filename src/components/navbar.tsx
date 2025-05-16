@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { UserRole } from "@/types/api.types";
+import { NotificationDrawer } from "./notification-drawer";
 
 export function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -71,26 +72,29 @@ export function Navbar() {
       <div>
         <Logo color="text-[#232C33]" />
       </div>
-      <div>
-      {isAuthenticated ? (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button>{user?.name}</Button></DropdownMenuTrigger>
-          <DropdownMenuContent className="z-100">
-            {renderDropdownItems()}
-            <DropdownMenuItem className="z-100">
-              <Button className="w-full z-100" variant="ghost" onClick={() => logout()}>
-                Гарах
-              </Button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ) : (
-        <Button variant="secondary">
-          <Link href="/login">
-            Нэвтрэх
-          </Link>
-        </Button>
-      )}
+      <div className="flex items-center gap-2">
+        {isAuthenticated && (
+          <NotificationDrawer />
+        )}
+        {isAuthenticated ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button>{user?.name}</Button></DropdownMenuTrigger>
+            <DropdownMenuContent className="z-100">
+              {renderDropdownItems()}
+              <DropdownMenuItem className="z-100">
+                <Button className="w-full z-100" variant="ghost" onClick={() => logout()}>
+                  Гарах
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button variant="secondary">
+            <Link href="/login">
+              Нэвтрэх
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   )
