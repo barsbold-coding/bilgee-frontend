@@ -22,9 +22,9 @@ export function NotificationDrawer() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await notificationAPI.getAll({ seen: false });
-      setNotifications(response.data);
-      setUnreadCount(response.data.length);
+      const response = await notificationAPI.getAll();
+      setNotifications(response.data.sort((a, b) => a.createdAt < b.createdAt));
+      setUnreadCount(response.data.filter((e) => !e.seen).length);
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
     }

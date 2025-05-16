@@ -25,7 +25,7 @@ export function formatDateRange(startDate: Date | string | undefined, endDate: D
   return `${start} - ${end}`;
 }
 
-export function qs(obj: any) {
+export function qs(obj: any = {}) {
   if (Object.keys(obj).length === 0) return '';
   const params = new URLSearchParams();
   

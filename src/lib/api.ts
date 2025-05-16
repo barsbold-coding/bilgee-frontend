@@ -104,7 +104,7 @@ export const applicationsAPI = {
 
 export const notificationAPI = {
   create: (data: NotificationCreate) => api.post('/api/notifications', data),
-  getAll: (query: NotificationQuery) => api.get(`/api/notifications${qs(query)}`),
+  getAll: (query?: NotificationQuery) => api.get(`/api/notifications${qs(query)}`),
   markAsSeen: (id: number) => api.patch(`/api/notifications/${id}/seen`),
 }
 
