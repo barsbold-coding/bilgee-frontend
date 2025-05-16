@@ -7,10 +7,38 @@ import { Resume, User, UserRole } from '@/types/api.types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { formatDateRange } from '@/lib/utils';
 import RoleGuard from '@/components/role-guard';
 import { toast } from 'sonner';
 import { ResumeCard } from '@/components/resume-card';
+
+// Student information component
+const StudentInfoCard = ({ student }: { student: User | null }) => {
+  if (!student) return null;
+  
+  return (
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="text-3xl">Оюутны мэдээлэл</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          <div className="grid grid-cols-12 gap-2">
+            <span className="font-medium col-span-3">Нэр:</span>
+            <span className="col-span-9">{student.name}</span>
+          </div>
+          <div className="grid grid-cols-12 gap-2">
+            <span className="font-medium col-span-3">Имэйл:</span>
+            <span className="col-span-9">{student.email}</span>
+          </div>
+          <div className="grid grid-cols-12 gap-2">
+            <span className="font-medium col-span-3">Утас:</span>
+            <span className="col-span-9">{student.phoneNumber}</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default function ViewStudentResume() {
   const [resume, setResume] = useState<Resume | null>(null);
@@ -41,7 +69,6 @@ export default function ViewStudentResume() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
         if (resume) {
           const studentRes = await usersAPI.getById(resume.studentId);
@@ -50,12 +77,12 @@ export default function ViewStudentResume() {
       } catch (error) {
         console.log(error);
         toast.error('Алдаа гарлаа')
-      } finally {
-        setLoading(false);
       }
     }
 
-    fetchData();
+    if (resume?.studentId) {
+      fetchData();
+    }
   }, [resume]);
 
   const goBack = () => {
@@ -87,10 +114,14 @@ export default function ViewStudentResume() {
 
   return (
     <RoleGuard allowedRoles={[UserRole.ORGANISATION]}>
-      <div className="container mx-auto py-8">
-        <Button onClick={goBack} variant="outline" className="mb-4">
-          Буцах
-        </Button>
+      <div className="container mx-auto py-8 max-w-4xl">
+        <div className="flex justify-end">
+          <Button onClick={goBack} variant="outline" className="mb-4">
+            Буцах
+          </Button>
+        </div>
+        
+        <StudentInfoCard student={student} />
         <ResumeCard resume={resume} />
       </div>
     </RoleGuard>

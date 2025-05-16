@@ -148,3 +148,10 @@ export type Application = {
 export type ApplicationUpdate = {
   status?: ApplicationStatus;
 }
+
+export type Notification = {
+  id: number;
+  title: string;
+  description: string;
+  seenAt: Date;
+}
