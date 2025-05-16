@@ -4,6 +4,8 @@ import {
   CreateResume,
   CredentialsType,
   InternshipQueryType,
+  NotificationCreate,
+  NotificationQuery,
   RegisterUserType,
   Resume,
   UpdateInternshipType,
@@ -99,5 +101,11 @@ export const applicationsAPI = {
     api.get('/api/applications/student/own'),
   getApplicationResume: (id: number) => api.get(`/api/applications/${id}/resume`)
 };
+
+export const notificationAPI = {
+  create: (data: NotificationCreate) => api.post('/api/notifications', data),
+  getAll: (query: NotificationQuery) => api.get(`/api/notifications${qs(query)}`),
+  markAsSeen: (id: number) => api.patch(`/api/notifications/${id}/seen`),
+}
 
 export default api;

@@ -155,3 +155,15 @@ export type Notification = {
   description: string;
   seenAt: Date;
 }
+
+export type NotificationCreate = {
+  title: string;
+  description: string;
+  userId: number;
+}
+
+export type NotificationQuery = {
+  title?: string;
+  description?: string;
+  seen?: boolean;
+}
